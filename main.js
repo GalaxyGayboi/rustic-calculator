@@ -17,6 +17,12 @@ history.style = "color: black; font-size: 20px;"
 currentNumber.style = "color: white; font-size: 40px; text-align: right;"
 
 function add() {
+    if (currentlyOperating === true) {
+        currentOperator[thisNum] = "add";
+        historyText = historyText.slice(0, -3);
+        historyText += ` + `
+        history.innerHTML = `${historyText}`;
+    } else {
     numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
     historyText += ` + `;
     history.innerHTML = `${historyText}`;
@@ -27,9 +33,16 @@ function add() {
     justEqualed = false;
     currentlyOperating = true;
     }
+    }
 
 
 function subtract() {
+    if (currentlyOperating === true) {
+        currentOperator[thisNum] = "subtract";
+        historyText = historyText.slice(0, -3);
+        historyText += ` - `
+        history.innerHTML = `${historyText}`;
+    } else {
     numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
     historyText += ` - `;
     history.innerHTML = `${historyText}`;
@@ -39,9 +52,16 @@ function subtract() {
     console.log(numList)
     justEqualed = false;
     currentlyOperating = true;
+    }
 }
 
 function multiply() {
+    if (currentlyOperating === true) {
+        currentOperator[thisNum] = "multiply";
+        historyText = historyText.slice(0, -3);
+        historyText += ` x `
+        history.innerHTML = `${historyText}`;
+    } else {
     numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
     historyText += ` x ` //ray for the next number
     finalNum = ""; // clears finalNum for the next number
@@ -49,9 +69,16 @@ function multiply() {
     console.log(numList)
     justEqualed = false;
     currentlyOperating = true;
+    }
 }
 
 function divide() {
+    if (currentlyOperating === true) {
+        currentOperator[thisNum] = "divide";
+        historyText = historyText.slice(0, -3);
+        historyText += ` / `
+        history.innerHTML = `${historyText}`;
+    } else {
     numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
     historyText += ` / `;
     history.innerHTML = `${historyText}`;
@@ -61,6 +88,7 @@ function divide() {
     console.log(numList)
     justEqualed = false;
     currentlyOperating = true;
+}
 }
 
 function operate() {
@@ -143,6 +171,11 @@ let historyTextNum = 0;
                 console.log(justEqualed)
                 console.log(`numList: ${numList}`)
                 console.log(`thisNum: ${thisNum}`)
+            } else if (button.innerHTML === "+/-") {
+                finalNum = -finalNum;
+                currentNumber.textContent = `${finalNum}`
+                historyText += `${button.innerHTML}`
+                history.innerHTML = `${historyText}`
             } else {
             currentlyOperating = false;
             numArray.push(button.innerHTML);

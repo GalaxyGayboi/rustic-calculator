@@ -50,16 +50,17 @@ function anyOperator(operator, sign) {
 function operate() {
     for(let i = 0; i <= numList.length; i++) {
         firstNumberIsFound++;
-        if (i === numList.length) {         
-            currentNumber.textContent = `${numList[i-1]}`;
-            historyText += `${finalNum} = ${numList[i - 1]}`;
+        if (i === numList.length) {
+            roundedSolution = Math.round(numList[numList.length - 1] * 100000)/100000;
+            currentNumber.textContent = `${roundedSolution}`;
+            historyText += `${finalNum} = ${roundedSolution}`;
             history.innerHTML = `${historyText}`;
             justEqualed = true;
             thisNum = 0;
             console.log(numList)
             solution = numList[numList.length - 1]
             numList = [];
-            finalNum = solution;
+            finalNum = roundedSolution;
             firstNumberIsFound++;
             console.log(numList)
             console.log(solution)
@@ -115,6 +116,7 @@ let currentlyOperating = false;
 let solution = 0;
 let firstNumberIsFound = 0;
 let currentlyNegative = false;
+let roundedSolution = 0;
     numberButtons.forEach((button) => {
         button.classList.add('numberButton');
         button.addEventListener('click', () => {

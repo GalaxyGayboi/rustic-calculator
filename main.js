@@ -151,15 +151,28 @@ let roundedSolution = 0;
                     console.log(finalNum.length)
                 }
             } else if (button.innerHTML === '.') {
-                currentlyOperating = false;
-                numArray.push(button.innerHTML);
-                finalNum = parseFloat(numArray.join(""));
-                currentNumber.textContent = `${finalNum}.`
-                console.log(finalNum);
-                console.log(justEqualed)
-                console.log(numArray)
-                console.log(`numList: ${numList}`)
-                console.log(`thisNum: ${thisNum}`)
+                if (finalNum === "") {
+                    currentlyOperating = false;
+                    numArray.push(0);
+                    numArray.push(button.innerHTML);
+                    finalNum = parseFloat(numArray.join(""));
+                    currentNumber.textContent = `${finalNum}.`
+                    console.log(finalNum);
+                    console.log(justEqualed)
+                    console.log(numArray)
+                    console.log(`numList: ${numList}`)
+                    console.log(`thisNum: ${thisNum}`)
+                } else {
+                    currentlyOperating = false;
+                    numArray.push(button.innerHTML);
+                    finalNum = parseFloat(numArray.join(""));
+                    currentNumber.textContent = `${finalNum}.`
+                    console.log(finalNum);
+                    console.log(justEqualed)
+                    console.log(numArray)
+                    console.log(`numList: ${numList}`)
+                    console.log(`thisNum: ${thisNum}`)
+            }
             } else {
                 currentlyOperating = false;
                 numArray.push(button.innerHTML);

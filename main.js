@@ -16,87 +16,45 @@ history.innerHTML = `${historyText}`;
 history.style = "color: black; font-size: 20px;"
 currentNumber.style = "color: white; font-size: 40px; text-align: right;"
 
-function add() {
+function anyOperator(operator, sign) {
     if (currentlyOperating === true) {
-        currentOperator[thisNum] = "add";
+        currentOperator[thisNum] = `${operator}`;
         historyText = historyText.slice(0, -3);
-        historyText += ` + `
+        historyText += ` ${sign} `
         history.innerHTML = `${historyText}`;
+    } else if(justEqualed === false) {
+        numList[thisNum] = parseFloat(finalNum); // saves current number in a full list of all inputted numbers
+        historyText += `${finalNum} ${sign} `;
+        history.innerHTML = `${historyText}`;
+        numArray = []; // clears numArray for the next number
+        finalNum = ""; // clears finalNum for the next number
+        currentOperator[thisNum] = `${operator}`; // tells operate() which operator is being used
+        console.log(numList)
+        justEqualed = false;
+        currentlyOperating = true;
+        negativeStartPoint += historyText.length - 1;
+        currentlyNegative = false;
     } else {
-    numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
-    historyText += ` + `;
-    history.innerHTML = `${historyText}`;
-    numArray = []; // clears numArray for the next number
-    finalNum = ""; // clears finalNum for the next number
-    currentOperator[thisNum] = "add"; // tells operate() which operator is being used
-    console.log(numList)
-    justEqualed = false;
-    currentlyOperating = true;
+        numList[thisNum] = parseFloat(finalNum); // saves current number in a full list of all inputted numbers
+        historyText += ` ${sign} `;
+        history.innerHTML = `${historyText}`;
+        numArray = []; // clears numArray for the next number
+        finalNum = ""; // clears finalNum for the next number
+        currentOperator[thisNum] = `${operator}`; // tells operate() which operator is being used
+        console.log(numList)
+        justEqualed = false;
+        currentlyOperating = true;
+        negativeStartPoint += historyText.length - 1;
+        currentlyNegative = false;
     }
     }
-
-
-function subtract() {
-    if (currentlyOperating === true) {
-        currentOperator[thisNum] = "subtract";
-        historyText = historyText.slice(0, -3);
-        historyText += ` - `
-        history.innerHTML = `${historyText}`;
-    } else {
-    numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
-    historyText += ` - `;
-    history.innerHTML = `${historyText}`;
-    numArray = []; // clears numArray for the next number
-    finalNum = ""; // clears finalNum for the next number
-    currentOperator[thisNum] = "subtract"; // tells operate() which operator is being used
-    console.log(numList)
-    justEqualed = false;
-    currentlyOperating = true;
-    }
-}
-
-function multiply() {
-    if (currentlyOperating === true) {
-        currentOperator[thisNum] = "multiply";
-        historyText = historyText.slice(0, -3);
-        historyText += ` x `
-        history.innerHTML = `${historyText}`;
-    } else {
-    numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
-    historyText += ` x ` //ray for the next number
-    finalNum = ""; // clears finalNum for the next number
-    currentOperator[thisNum] = "multiply"; // tells operate() which operator is being used
-    console.log(numList)
-    justEqualed = false;
-    currentlyOperating = true;
-    }
-}
-
-function divide() {
-    if (currentlyOperating === true) {
-        currentOperator[thisNum] = "divide";
-        historyText = historyText.slice(0, -3);
-        historyText += ` / `
-        history.innerHTML = `${historyText}`;
-    } else {
-    numList[thisNum] = parseInt(finalNum); // saves current number in a full list of all inputted numbers
-    historyText += ` / `;
-    history.innerHTML = `${historyText}`;
-    numArray = []; // clears numArray for the next number
-    finalNum = ""; // clears finalNum for the next number
-    currentOperator[thisNum] = "divide"; // tells operate() which operator is being used
-    console.log(numList)
-    justEqualed = false;
-    currentlyOperating = true;
-}
-}
 
 function operate() {
     for(let i = 0; i <= numList.length; i++) {
         firstNumberIsFound++;
         if (i === numList.length) {         
             currentNumber.textContent = `${numList[i-1]}`;
-            historyText += ` = ${numList[i - 1]}`;
+            historyText += `${finalNum} = ${numList[i - 1]}`;
             history.innerHTML = `${historyText}`;
             justEqualed = true;
             thisNum = 0;
@@ -152,6 +110,8 @@ let currentlyOperating = false;
 let finalSolution = 0;
 let firstNumberIsFound = 0;
 let historyTextNum = 0;
+let negativeStartPoint = 0;
+let currentlyNegative = false;
     numberButtons.forEach((button) => {
         button.classList.add('numberButton');
         button.addEventListener('click', () => {
@@ -163,31 +123,48 @@ let historyTextNum = 0;
                 currentlyOperating = false;
                 justEqualed = false;
                 numArray.push(button.innerHTML);
-                finalNum = parseInt(numArray.join(""));
+                finalNum = parseFloat(numArray.join(""));
                 currentNumber.textContent = `${finalNum}`
-                historyText += `${button.innerHTML}`
-                history.innerHTML = `${historyText}`
                 console.log(finalNum);
                 console.log(justEqualed)
                 console.log(`numList: ${numList}`)
                 console.log(`thisNum: ${thisNum}`)
             } else if (button.innerHTML === "+/-") {
-                finalNum = -finalNum;
-                currentNumber.textContent = `${finalNum}`
-                historyText += `${button.innerHTML}`
-                history.innerHTML = `${historyText}`
+                if (currentlyNegative === false) {
+                    currentlyOperating = false;
+                    finalNum = -Math.abs(finalNum);
+                    currentNumber.textContent = `${finalNum}`
+                    history.innerHTML = `${historyText}`
+                    currentlyNegative = true;
+                    console.log(finalNum.length)
+                } else {
+                    currentlyOperating = false;
+                    finalNum = Math.abs(finalNum);
+                    currentNumber.textContent = `${finalNum}`
+                    history.innerHTML = `${historyText}`
+                    currentlyNegative = false;
+                    console.log(finalNum.length)
+                }
+            } else if (button.innerHTML === '.') {
+                currentlyOperating = false;
+                numArray.push(button.innerHTML);
+                finalNum = parseFloat(numArray.join(""));
+                currentNumber.textContent = `${finalNum}.`
+                console.log(finalNum);
+                console.log(justEqualed)
+                console.log(numArray)
+                console.log(`numList: ${numList}`)
+                console.log(`thisNum: ${thisNum}`)
             } else {
-            currentlyOperating = false;
-            numArray.push(button.innerHTML);
-            finalNum = parseInt(numArray.join(""));
-            currentNumber.textContent = `${finalNum}`
-            historyText += `${button.innerHTML}`
-            history.innerHTML = `${historyText}`
-            // currentNumber.textContent = `${finalNum}`;
-           console.log(finalNum);
-           console.log(justEqualed)
-           console.log(`numList: ${numList}`)
-           console.log(`thisNum: ${thisNum}`)
+                currentlyOperating = false;
+                numArray.push(button.innerHTML);
+                finalNum = parseFloat(numArray.join(""));
+                currentNumber.textContent = `${finalNum}`
+                console.log(finalNum);
+                console.log(justEqualed)
+                console.log(numArray)
+                console.log(`numList: ${numList}`)
+                console.log(`thisNum: ${thisNum}`)
             }
         })
     })
@@ -200,13 +177,13 @@ operatorButtons.forEach((button) => {
     button.addEventListener('click', () => {
         console.log(button)
         if(button.innerHTML === "+") {
-            add();
+            anyOperator("add", "+");
         }else if(button.innerHTML === "-") {
-            subtract();
+            anyOperator("subtract", "-");
         }else if(button.innerHTML === "x") {
-            multiply();
+            anyOperator("multiply", "x");
         }else if(button.innerHTML === "/") {
-            divide();
+            anyOperator("divide", "/");
         }else if(button.innerHTML === "=") {
             numList.push(finalNum);
             operate();

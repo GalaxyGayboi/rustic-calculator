@@ -49,21 +49,19 @@ function anyOperator(operator, sign) {
 
 function operate() {
     for(let i = 0; i <= numList.length; i++) {
-        firstNumberIsFound++;
         if (i === numList.length) {
             roundedSolution = Math.round(numList[numList.length - 1] * 100000)/100000;
             stringSolution = roundedSolution.toString();
-            if(stringSolution.length >= 10) {
+            if(stringSolution.length >= 10) { // cuts off the solutions excess numbers to save space
                 currentNumber.textContent = `${stringSolution.slice(0,10)}e+${stringSolution.length - 10}`;
-            historyText += `${finalNum} = ${stringSolution.slice(0,10)}e+${stringSolution.length - 10}`;
-            history.innerHTML = `${historyText}`;
-            justEqualed = true;
-            thisNum = 0;
-            console.log(numList)
-            solution = numList[numList.length - 1]
-            numList = [];
-            finalNum = roundedSolution;
-            firstNumberIsFound++;
+                historyText += `${finalNum} = ${stringSolution.slice(0,10)}e+${stringSolution.length - 10}`;
+                history.innerHTML = `${historyText}`;
+                justEqualed = true;
+                thisNum = 0;
+                console.log(numList)
+                solution = numList[numList.length - 1]
+                numList = [];
+                finalNum = roundedSolution;
             } else {
             currentNumber.textContent = `${roundedSolution}`;
             historyText += `${finalNum} = ${roundedSolution}`;
@@ -74,12 +72,10 @@ function operate() {
             solution = numList[numList.length - 1]
             numList = [];
             finalNum = roundedSolution;
-            firstNumberIsFound++;
             console.log(`this is ${roundedSolution.toString().length} char long`)
             console.log(numList)
             console.log(solution)
             console.log(finalNum)
-            console.log(firstNumberIsFound)
             }
         }
         if(currentOperator[i] === "add") {
@@ -125,14 +121,13 @@ let thisNum = 0;
 let numArray = [];
 let currentOperator = [];
 let finalNum = "";
-let runCount = 0;
 let justEqualed = false;
 let currentlyOperating = false;
 let solution = 0;
-let firstNumberIsFound = 0;
 let currentlyNegative = false;
 let roundedSolution = 0;
 let stringSolution = "";
+
     numberButtons.forEach((button) => {
         button.classList.add('numberButton');
         button.addEventListener('click', () => {

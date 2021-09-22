@@ -69,13 +69,13 @@ function operate() {
         if(currentOperator[i] === "add") {
             numList[i + 1] = numList[i] + numList[i + 1]
             console.log(numList[i + 1])
-        } else if(currentOperator[i] === "subtract") {
+        }   else if(currentOperator[i] === "subtract") {
             numList[i + 1] = numList[i] - numList[i + 1]
             console.log(numList[i + 1])
-        } else if(currentOperator[i] === "multiply") {
+        }   else if(currentOperator[i] === "multiply") {
             numList[i + 1] = numList[i] * numList[i + 1]
             console.log(numList[i + 1])
-        }  else if(currentOperator[i] === "divide") {
+        }   else if(currentOperator[i] === "divide") {
             if (numList[i + 1] === 0) {
                 historyText += `${finalNum} = ERROR`;
                 history.innerHTML = `${historyText}`;
@@ -87,7 +87,10 @@ function operate() {
             numList[i + 1] = numList[i] / numList[i + 1]
             console.log(numList[i + 1])
             } 
-    }
+        }   else if(currentOperator[i] === "exponent") {
+            numList[i + 1] = numList[i] ** numList[i + 1];
+            console.log(numList[i + 1])
+        }    
     }
 }
 function clear() {
@@ -184,10 +187,13 @@ operatorButtons.forEach((button) => {
             anyOperator("multiply", "x");
         }else if(button.innerHTML === "/") {
             anyOperator("divide", "/");
-        }else if(button.innerHTML === "=") {
+        }else if(button.innerHTML === "^") {
+            anyOperator("exponent", "^");
+        }
+        else if(button.innerHTML === "=") {
             numList.push(finalNum);
             operate();
-        } else if(button.innerHTML === "C") {
+        }else if(button.innerHTML === "C") {
             clear();
         } else if(button.innerHTML === "Bksp") {
             if (numArray.length === 1) {
@@ -198,11 +204,11 @@ operatorButtons.forEach((button) => {
                 currentNumber.textContent = `${finalNum}`
                 console.log(numArray.length)
             } else {
-                currentlyOperating = false;
-                numArray.pop();
-                finalNum = parseFloat(numArray.join(""));
-                currentNumber.textContent = `${finalNum}`
-                console.log(numArray.length)
+            currentlyOperating = false;
+            numArray.pop();
+            finalNum = parseFloat(numArray.join(""));
+            currentNumber.textContent = `${finalNum}`
+            console.log(numArray.length)
         }
     }
     })

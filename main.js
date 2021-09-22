@@ -18,13 +18,13 @@ currentNumber.style = "color: white; font-size: 40px; text-align: right;"
 
 function anyOperator(operator, sign) {
     if (currentlyOperating === true) {
-        currentOperator[thisNum] = `${operator}`;
-        historyText = historyText.slice(0, -3);
-        historyText += ` ${sign} `
+        currentOperator[thisNum] = `${operator}`; // saves the new sign over the old sign
+        historyText = historyText.slice(0, -3); // removes the last inputted sign from historyText
+        historyText += ` ${sign} ` // replaces the empty sign spot with the new sign
         history.innerHTML = `${historyText}`;
-    } else if(justEqualed === false) {
+    } else if(justEqualed === false) { // ensures that there will be no repeats of finalNum in historyText
         numList[thisNum] = parseFloat(finalNum); // saves current number in a full list of all inputted numbers
-        historyText += `${finalNum} ${sign} `;
+        historyText += `${finalNum} ${sign} `; // adds both finalNum and the specified sum
         history.innerHTML = `${historyText}`;
         numArray = []; // clears numArray for the next number
         finalNum = ""; // clears finalNum for the next number
@@ -32,11 +32,10 @@ function anyOperator(operator, sign) {
         console.log(numList)
         justEqualed = false;
         currentlyOperating = true;
-        negativeStartPoint += historyText.length - 1;
         currentlyNegative = false;
-    } else {
+    } else { // where the function will go if operate() has just been performed
         numList[thisNum] = parseFloat(finalNum); // saves current number in a full list of all inputted numbers
-        historyText += ` ${sign} `;
+        historyText += ` ${sign} `; // adds ONLY the specified sign to historyText
         history.innerHTML = `${historyText}`;
         numArray = []; // clears numArray for the next number
         finalNum = ""; // clears finalNum for the next number
@@ -44,7 +43,6 @@ function anyOperator(operator, sign) {
         console.log(numList)
         justEqualed = false;
         currentlyOperating = true;
-        negativeStartPoint += historyText.length - 1;
         currentlyNegative = false;
     }
     }
@@ -59,13 +57,12 @@ function operate() {
             justEqualed = true;
             thisNum = 0;
             console.log(numList)
-            finalSolution = numList[numList.length - 1]
+            solution = numList[numList.length - 1]
             numList = [];
-            finalNum = finalSolution;
+            finalNum = solution;
             firstNumberIsFound++;
-            historyTextNum++;
             console.log(numList)
-            console.log(finalSolution)
+            console.log(solution)
             console.log(finalNum)
             console.log(firstNumberIsFound)
         }
@@ -80,8 +77,12 @@ function operate() {
             console.log(numList[i + 1])
         }  else if(currentOperator[i] === "divide") {
             if (numList[i + 1] === 0) {
+                historyText += `${finalNum} = ERROR`;
+                history.innerHTML = `${historyText}`;
+                justEqualed = true;
                 console.log('ERROR')
                 currentNumber.textContent = 'ERROR';
+                break;
             } else {
             numList[i + 1] = numList[i] / numList[i + 1]
             console.log(numList[i + 1])
@@ -95,7 +96,8 @@ function clear() {
     numList = []; // clears numList for a new set
     currentOperator = []; // clears currentOperator
     finalNum = ""; // clears finalNum
-    historyText += "<br><br>";
+    historyText += "<br><br>"; // skips a line to make historyText more readable
+    justEqualed = false; // ensures that only one line will be skipped if the clear button is pressed
     ;
 }
 // Storing and Operating on Variables
@@ -107,10 +109,8 @@ let finalNum = "";
 let runCount = 0;
 let justEqualed = false;
 let currentlyOperating = false;
-let finalSolution = 0;
+let solution = 0;
 let firstNumberIsFound = 0;
-let historyTextNum = 0;
-let negativeStartPoint = 0;
 let currentlyNegative = false;
     numberButtons.forEach((button) => {
         button.classList.add('numberButton');
@@ -189,7 +189,21 @@ operatorButtons.forEach((button) => {
             operate();
         } else if(button.innerHTML === "C") {
             clear();
+        } else if(button.innerHTML === "Bksp") {
+            if (numArray.length === 1) {
+                currentlyOperating = false;
+                numArray.pop();
+                numArray.push(0);
+                finalNum = parseFloat(numArray.join(""));
+                currentNumber.textContent = `${finalNum}`
+                console.log(numArray.length)
+            } else {
+                currentlyOperating = false;
+                numArray.pop();
+                finalNum = parseFloat(numArray.join(""));
+                currentNumber.textContent = `${finalNum}`
+                console.log(numArray.length)
         }
-        
+    }
     })
 })
